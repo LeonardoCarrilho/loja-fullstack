@@ -29,3 +29,6 @@ cd web && npm install && npm run dev   # http://localhost:5173
 Requer Node.js 22.5 ou mais recente.
 
 Projeto do módulo 37 do curso Full Stack Turbo (TipsCode).
+
+## Deploy na Vercel
+O arquivo `vercel.json` e a pasta `api/` fazem o projeto rodar como função serverless na Vercel. Na Vercel, a API usa PostgreSQL pela variável `DATABASE_URL`.
