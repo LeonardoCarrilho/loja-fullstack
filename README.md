@@ -1,6 +1,8 @@
 # 🛒 Loja Full Stack — Cadastro de Produtos
 
-Aplicação **full stack** de cadastro de produtos: front-end em **React** e API REST em **Node.js + Express** com **MySQL**.
+Aplicação **full stack** de cadastro de produtos: front-end em **React** e API REST em **Node.js + Express** com **PostgreSQL ou MySQL**.
+
+🔗 **Ao vivo:** https://loja-fullstack.vercel.app
 
 ## Estrutura
 ```
