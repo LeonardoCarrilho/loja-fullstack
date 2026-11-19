@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { api } from "./api.js";
-import { Container, Global, Titulo } from "./estilos.js";
+import { Cabecalho, Contador, Container, Global, Rodape, Titulo } from "./estilos.js";
 import Formulario from "./components/Formulario.jsx";
 import Tabela from "./components/Tabela.jsx";
 
@@ -22,11 +22,18 @@ export default function App() {
     carregar();
   }, [carregar]);
 
+  const unidades = produtos.reduce((soma, p) => soma + Number(p.estoque || 0), 0);
+
   return (
     <>
       <Global />
       <Container>
-        <Titulo>🛒 Loja <span>· Cadastro de Produtos</span></Titulo>
+        <Cabecalho>
+          <Titulo>Cadastro<br />de produtos</Titulo>
+          <Contador>
+            <strong>{produtos.length}</strong> {produtos.length === 1 ? "produto" : "produtos"} · <strong>{unidades}</strong> em estoque
+          </Contador>
+        </Cabecalho>
         <Formulario
           editando={editando}
           aoSalvar={() => { setEditando(null); carregar(); }}
@@ -41,7 +48,7 @@ export default function App() {
             if (editando?.id === id) setEditando(null);
           }}
         />
-        <small style={{ textAlign: "center", color: "#6b7280" }}>Feito por Leonardo Carrilho · React, Node.js, Express e MySQL</small>
+        <Rodape>Feito por Leonardo Carrilho com React, Node.js, Express e PostgreSQL.</Rodape>
       </Container>
       <ToastContainer position="bottom-left" autoClose={2500} />
     </>

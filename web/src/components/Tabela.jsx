@@ -1,9 +1,11 @@
 import { toast } from "react-toastify";
 import { api } from "../api.js";
-import { Cartao, Icone, Tabela as T } from "../estilos.js";
+import { Acao, Etiqueta, Vazio, Vitrine } from "../estilos.js";
 
-const reais = (v) => v.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+const reais = (v) => Number(v).toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+const ESTOQUE_BAIXO = 3;
 
+// Mostra os produtos como etiquetas de preço numa vitrine.
 export default function Tabela({ produtos, editando, aoEditar, aoExcluir }) {
   const excluir = async (p) => {
     if (!window.confirm(`Excluir "${p.nome}"?`)) return;
@@ -16,32 +18,28 @@ export default function Tabela({ produtos, editando, aoEditar, aoExcluir }) {
     }
   };
 
+  if (produtos.length === 0) {
+    return <Vazio>Nenhum produto cadastrado. Preencha o formulário acima para cadastrar o primeiro.</Vazio>;
+  }
+
   return (
-    <Cartao>
-      <T>
-        <thead>
-          <tr>
-            <th>Nome</th><th>Preço</th><th>Estoque</th><th className="opcional">Telefone</th><th />
-          </tr>
-        </thead>
-        <tbody>
-          {produtos.length === 0 && (
-            <tr><td colSpan={5}>Nenhum produto cadastrado.</td></tr>
-          )}
-          {produtos.map((p) => (
-            <tr key={p.id} className={editando?.id === p.id ? "editando" : ""}>
-              <td>{p.nome}</td>
-              <td>{reais(p.preco)}</td>
-              <td>{p.estoque}</td>
-              <td className="opcional">{p.fone}</td>
-              <td className="acoes">
-                <Icone aria-label={`Editar ${p.nome}`} onClick={() => aoEditar(p)}>✏️</Icone>
-                <Icone aria-label={`Excluir ${p.nome}`} onClick={() => excluir(p)}>🗑️</Icone>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </T>
-    </Cartao>
+    <Vitrine aria-label="Produtos cadastrados">
+      {produtos.map((p) => (
+        <Etiqueta key={p.id} $editando={editando?.id === p.id}>
+          <span className="nome">{p.nome}</span>
+          <span className="preco"><small>R$</small>{reais(p.preco)}</span>
+          <div className="meta">
+            <span className={p.estoque <= ESTOQUE_BAIXO ? "baixo" : ""}>
+              {p.estoque <= ESTOQUE_BAIXO ? `Restam ${p.estoque}` : `${p.estoque} em estoque`}
+            </span>
+            <span>{p.fone}</span>
+          </div>
+          <div className="acoes">
+            <Acao type="button" aria-label={`Editar ${p.nome}`} onClick={() => aoEditar(p)}>Editar</Acao>
+            <Acao type="button" $perigo aria-label={`Excluir ${p.nome}`} onClick={() => excluir(p)}>Excluir</Acao>
+          </div>
+        </Etiqueta>
+      ))}
+    </Vitrine>
   );
 }

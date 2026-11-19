@@ -44,11 +44,12 @@ export default function Formulario({ editando, aoSalvar, aoCancelar }) {
 
   return (
     <Cartao>
+      <h2>{editando ? `Editando: ${editando.nome}` : "Novo produto"}</h2>
       <FormArea ref={ref} onSubmit={enviar}>
         <Campo>Nome<input name="nome" maxLength={100} /></Campo>
         <Campo>Preço (R$)<input name="preco" inputMode="decimal" placeholder="0,00" /></Campo>
         <Campo>Estoque<input name="estoque" type="number" min={0} step={1} /></Campo>
-        <Campo>Telefone<input name="fone" inputMode="tel" placeholder="(11) 99999-0000" /></Campo>
+        <Campo>Telefone do fornecedor<input name="fone" inputMode="tel" placeholder="(11) 99999-0000" /></Campo>
         <Botao type="submit" disabled={enviando}>{editando ? "Atualizar" : "Salvar"}</Botao>
         {editando && <Botao type="button" $variante="secundario" onClick={aoCancelar}>Cancelar</Botao>}
       </FormArea>

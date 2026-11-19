@@ -1,88 +1,141 @@
 import styled, { createGlobalStyle } from "styled-components";
 
+// Identidade "balcão de loja": etiquetas de preço em amarelo suave sobre papel claro.
+const cor = {
+  papel: "#fafaf7",
+  tinta: "#27272a",
+  suave: "#5f5f66",
+  fio: "#d9d9de",
+  etiqueta: "#fbefb4",
+  etiquetaForte: "#f5dc6e",
+  alerta: "#c2410c",
+};
+
 export const Global = createGlobalStyle`
-  * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, sans-serif; }
-  body { background: #f2f2f2; color: #1f2937; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: ${cor.papel}; color: ${cor.tinta};
+    font-family: "Archivo", system-ui, sans-serif; font-size: 1.0625rem; line-height: 1.5;
+  }
+  :focus-visible { outline: 3px solid ${cor.tinta}; outline-offset: 2px; }
+  .Toastify__toast { font-family: "Archivo", system-ui, sans-serif; border-radius: 4px; }
 `;
 
 export const Container = styled.div`
   width: 100%;
-  max-width: 900px;
+  max-width: 1080px;
   margin: 0 auto;
-  padding: 32px 16px;
+  padding: 40px 16px 56px;
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 36px;
+`;
+
+export const Cabecalho = styled.header`
+  display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; flex-wrap: wrap;
+  border-bottom: 3px solid ${cor.tinta}; padding-bottom: 14px;
 `;
 
 export const Titulo = styled.h1`
-  font-size: 1.8rem;
-  span { color: #2c73d2; }
+  font-size: clamp(2.4rem, 7vw, 4.2rem);
+  font-weight: 900; line-height: .95; letter-spacing: -.02em;
+  font-variation-settings: "wdth" 70;
 `;
 
-export const Cartao = styled.div`
+export const Contador = styled.p`
+  color: ${cor.suave}; font-weight: 600;
+  strong { color: ${cor.tinta}; font-size: 1.4rem; font-variation-settings: "wdth" 70; }
+`;
+
+export const Cartao = styled.section`
+  border: 2px solid ${cor.tinta};
   background: #fff;
-  border-radius: 10px;
-  box-shadow: 0 2px 8px #0000001a;
-  padding: 20px;
+  padding: 22px;
+  h2 { font-size: 1.15rem; font-weight: 800; margin-bottom: 14px; }
 `;
 
 export const FormArea = styled.form`
   display: flex;
   flex-wrap: wrap;
-  gap: 12px;
+  gap: 14px;
   align-items: flex-end;
 `;
 
 export const Campo = styled.label`
   display: flex;
   flex-direction: column;
-  gap: 4px;
-  flex: 1 1 140px;
-  font-size: .9rem;
-  font-weight: 600;
+  gap: 6px;
+  flex: 1 1 150px;
+  font-size: .95rem;
+  font-weight: 700;
 
   input {
-    padding: 10px;
-    border: 1px solid #cbd5e1;
-    border-radius: 6px;
-    font-size: 1rem;
-    font-weight: 400;
+    font: inherit; font-weight: 400;
+    padding: 11px 12px;
+    border: 2px solid ${cor.fio};
+    border-radius: 2px;
+    background: ${cor.papel};
   }
+  input:focus { border-color: ${cor.tinta}; outline: none; background: #fff; }
 `;
 
 export const Botao = styled.button`
-  padding: 11px 20px;
-  border: 0;
-  border-radius: 6px;
+  font: inherit; font-weight: 800;
+  padding: 12px 22px;
+  border: 2px solid ${cor.tinta};
+  border-radius: 2px;
   cursor: pointer;
-  font-size: 1rem;
-  color: #fff;
-  background: ${({ $variante }) => ($variante === "secundario" ? "#6b7280" : "#2c73d2")};
+  color: ${cor.tinta};
+  background: ${({ $variante }) => ($variante === "secundario" ? "transparent" : cor.etiquetaForte)};
+  box-shadow: ${({ $variante }) => ($variante === "secundario" ? "none" : `3px 3px 0 ${cor.tinta}`)};
+  &:hover { transform: translate(1px, 1px); box-shadow: ${({ $variante }) => ($variante === "secundario" ? "none" : `2px 2px 0 ${cor.tinta}`)}; }
   &:disabled { opacity: .6; cursor: wait; }
 `;
 
-export const Tabela = styled.table`
-  width: 100%;
-  border-collapse: collapse;
-  word-break: break-word;
-
-  th, td { padding: 10px 8px; text-align: left; border-bottom: 1px solid #eef0f3; }
-  th { font-size: .85rem; text-transform: uppercase; color: #6b7280; }
-  td.acoes { text-align: right; white-space: nowrap; }
-  tr.editando { background: #eaf2fd; }
-
-  @media (max-width: 560px) {
-    .opcional { display: none; }
-  }
+// Vitrine: cada produto é uma etiqueta de preço.
+export const Vitrine = styled.ul`
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  gap: 22px;
 `;
 
-export const Icone = styled.button`
-  background: none;
-  border: 0;
-  cursor: pointer;
-  font-size: 1.1rem;
-  padding: 4px 8px;
-  border-radius: 6px;
-  &:hover { background: #f1f5f9; }
+export const Etiqueta = styled.li`
+  position: relative;
+  background: ${cor.etiqueta};
+  padding: 20px 20px 16px 34px;
+  border-radius: 2px 14px 14px 2px;
+  clip-path: polygon(14px 0, 100% 0, 100% 100%, 14px 100%, 0 50%);
+  display: flex; flex-direction: column; gap: 6px;
+  outline: ${({ $editando }) => ($editando ? `3px dashed ${cor.tinta}` : "none")};
+  outline-offset: -8px;
+
+  &::before {
+    content: ""; position: absolute; left: 16px; top: 50%; width: 10px; height: 10px; margin-top: -5px;
+    border-radius: 50%; background: ${cor.papel}; box-shadow: inset 0 0 0 2px ${cor.suave};
+  }
+
+  .nome { font-weight: 700; font-size: 1.05rem; line-height: 1.25; word-break: break-word; }
+  .preco { font-size: 2.2rem; font-weight: 900; line-height: 1; letter-spacing: -.02em; font-variation-settings: "wdth" 70; }
+  .preco small { font-size: 1rem; vertical-align: .9em; margin-right: 3px; }
+  .meta { display: flex; justify-content: space-between; gap: 8px; flex-wrap: wrap; font-size: .9rem; border-top: 2px dotted ${cor.suave}; padding-top: 8px; margin-top: 4px; color: ${cor.suave}; }
+  .baixo { color: ${cor.alerta}; font-weight: 800; }
+  .acoes { display: flex; gap: 8px; margin-top: 6px; }
+`;
+
+export const Acao = styled.button`
+  font: inherit; font-size: .9rem; font-weight: 700;
+  padding: 5px 12px; border-radius: 2px; cursor: pointer;
+  border: 2px solid ${cor.tinta};
+  background: ${({ $perigo }) => ($perigo ? "transparent" : cor.tinta)};
+  color: ${({ $perigo }) => ($perigo ? cor.tinta : cor.etiqueta)};
+  &:hover { background: ${({ $perigo }) => ($perigo ? cor.alerta : cor.tinta)}; color: #fff; border-color: ${({ $perigo }) => ($perigo ? cor.alerta : cor.tinta)}; }
+`;
+
+export const Vazio = styled.p`
+  border: 2px dashed ${cor.fio}; padding: 32px; text-align: center; color: ${cor.suave};
+`;
+
+export const Rodape = styled.footer`
+  color: ${cor.suave}; font-size: .9rem; border-top: 2px solid ${cor.fio}; padding-top: 14px;
 `;
